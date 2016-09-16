@@ -10,6 +10,5 @@ PUT     /car/adverts/:id            controllers.CarAdvertsController.update(id: 
 DELETE  /car/adverts/:id            controllers.CarAdvertsController.delete(id: Int)
 
 # Serve Swagger spec using static resource controller
-# TODO
-# GET     /swagger/car/adverts        controllers.Assets.Asset(path="/public")
+GET     /swagger/car/adverts/spec.yml        controllers.Assets.versioned(path="/public/swagger", file="carAdverts.yml")
 

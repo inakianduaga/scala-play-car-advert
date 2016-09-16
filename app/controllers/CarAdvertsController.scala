@@ -11,23 +11,23 @@ import play.api.mvc._
 class CarAdvertsController @Inject() extends Controller {
 
   def index = Action {
-    Ok()
+    Ok("")
   }
 
   def show(id: Int) = Action {
-    Ok()
+    Ok("")
   }
 
   def create(id: Int) = Action {
-    Ok()
+    Ok("")
   }
 
   def update(id: Int) = Action {
-    Ok()
+    Ok("")
   }
 
   def delete(id: Int) = Action {
-    Ok()
+    Ok("")
   }
 
 }
