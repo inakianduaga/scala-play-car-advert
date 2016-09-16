@@ -17,7 +17,7 @@ class ApplicationSpec extends PlaySpec with OneAppPerTest {
 
   }
 
-  "HomeController" should {
+  "CarAdvertsController" should {
 
     "render the index page" in {
       val home = route(app, FakeRequest(GET, "/")).get
