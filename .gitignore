@@ -24,3 +24,6 @@ project/plugins/project/
 /.settings
 /RUNNING_PID
 
+# SBT Dockerfile generated caches
+.ivy2
+.sbt

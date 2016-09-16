@@ -1,0 +1,19 @@
+version: '2'
+services:
+  sbt:
+    build: ./sbt
+    image: sbt
+    ports:
+    - "9000:9000"
+    volumes:
+    - ../:/root
+    links:
+    - dynamodb
+    stdin_open: true
+  dynamodb:
+    build: ./dynamodb
+    image: dynamodb
+    ports:
+    - 8000:8000
+    environment:
+        - TABLE=${DYNAMODB_TABLE}
