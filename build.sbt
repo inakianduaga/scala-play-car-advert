@@ -13,3 +13,5 @@ libraryDependencies ++= Seq(
   "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % Test
 )
 
+// AWS Scala-wrapped SDK
+libraryDependencies += "com.github.seratch" %% "awscala" % "0.5.+"
