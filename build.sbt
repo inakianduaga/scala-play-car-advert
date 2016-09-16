@@ -15,3 +15,6 @@ libraryDependencies ++= Seq(
 
 // AWS Scala-wrapped SDK
 libraryDependencies += "com.github.seratch" %% "awscala" % "0.5.+"
+
+// Extra Play filters
+libraryDependencies += filters
