@@ -4,7 +4,9 @@ services:
 - docker
 script:
 - docker build -t sbt ./docker/sbt
-- docker run --rm $PWD:/root sbt assembly
+- docker run --rm -v $PWD:/root sbt scalastyle
+- docker run --rm -v $PWD:/root sbt assembly
+- docker run --rm -v $PWD:/root sbt clean coverage test
 before_deploy:
   # http://stackoverflow.com/questions/25929225/how-to-deploy-to-github-with-file-pattern-on-travis
   - export RELEASE_PKG_FILE=$(ls ./target/scala-2.11/*.jar)
@@ -17,3 +19,5 @@ deploy:
   on:
     repo: inakianduaga/scala-play-car-advert
     tags: true
+after_success:
+  - sbt coverageReport coveralls
