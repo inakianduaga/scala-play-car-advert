@@ -1,6 +1,8 @@
-import models.AdvertUsedCar
-import org.scalatestplus.play._
+package models
+
 import java.text.SimpleDateFormat
+
+import org.scalatestplus.play._
 
 class AdvertUsedCarSpec extends PlaySpec {
 

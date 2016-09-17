@@ -1,5 +1,6 @@
+package models
+
 import org.scalatestplus.play._
-import models.AdvertNewCar
 
 class AdvertNewCarSpec extends PlaySpec {
 

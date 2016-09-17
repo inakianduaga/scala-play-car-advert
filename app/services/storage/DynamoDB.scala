@@ -38,10 +38,7 @@ class DynamoDB @Inject() (configuration: play.api.Configuration) extends Storage
     */
   def create(data: StorableTrait): Try[Unit] = {
     val item = show(data.id)
-    item match {
-      case item.failed => Try { table.put(data.id, data.attributes) }
-      case _ => Failure(new Throwable("Item already exists"))
-    }
+    if(item.isFailure) Try { table.put(data.id, data.attributes) } else Failure(new Throwable("Item already exists"))
   }
 
   def delete(id: String): Try[Unit] = Try {
@@ -52,7 +49,7 @@ class DynamoDB @Inject() (configuration: play.api.Configuration) extends Storage
     * Convert DynamoDB Item to StorableTrait-compatible class
     */
   case class Storable(_attributes: Seq[(String, Any)]) extends StorableTrait {
-    val id = this._attributes.find(entry => entry._1 == id).get._2
+    val id: String = this._attributes.find(entry => entry._1 == "id").get._1
     val attributes = this._attributes.filter(entry => entry._1 != id)
   }
 
