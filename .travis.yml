@@ -1,0 +1,19 @@
+sudo: required
+dist: trusty
+services:
+- docker
+script:
+- docker build -t sbt ./docker/sbt
+- docker run --rm $PWD:/root sbt assembly
+before_deploy:
+  # http://stackoverflow.com/questions/25929225/how-to-deploy-to-github-with-file-pattern-on-travis
+  - export RELEASE_PKG_FILE=$(ls ./target/scala-2.11/*.jar)
+deploy:
+  provider: releases
+  api_key:
+    secure: FooFtfhf15wRjqo+ft4Nfjm4bGreMwiRAUjMLQz003agiSzJzSFUFo5xnrRhg3aUOND6LGUsq1/TlqUiJIsuoap0lhJbBuY9D+jfdN6eIGcdbfi3TZq+N0Bir/iXZpcYnFIaTMWgzyHXBz3zUcGuVgdjUngHjyqe2DOSA/6z7flQQsSqs5bdit1B64C0ZfTIdWMNw72sJntnq7VU/JhMmV+oOV40QgPxFBDaQzh8OaQZoErgaJ683vl09KkMuqfsO/Im1s30kVyCDJNQZ7DTV9ZcHezFhdqDwcwFcIFUxKcSm+WZ2sa7d5x5wKIi8emgz+S5o24mqimjlFNVeFfkg4TOQr9qSNtZv3K+iCF92sYX6/VME82EVk+z3UsbMV/xpLJlBsG42DtkjM5R132X6Ia+XvKUDj6eJkpaii5+jL7SKW9STuUhqqjPGzEYXeWGTeobHUb5t4HmUa9j5TihD+n6JfOy1dTxxZie417FrPEDR6WZeFJz2gtpyQfj1okTl5EOan4eVyxC8VyVSnqiS9nOw6zSlrgtOxxPbcgENVz7wIOMpLSb5AIDP3DJhSpVjYNcDzit4yFNWSFpFYmbLuV3CG/SmbfUMsdThlAnia+8Qm1gtObXK6zUxiEWSKm1pyMo+7kK78uSiEVdDxduZwbC4L5AAZmI5dCtj6RjjSE=
+  file_glob: true
+  file: "${RELEASE_PKG_FILE}"
+  on:
+    repo: inakianduaga/scala-play-car-advert
+    tags: true

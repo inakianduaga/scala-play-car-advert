@@ -1,6 +1,8 @@
 scala-play-car-advert
 =====================
 
+[![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url]
+
 > Scala Play car advert example application
 
 ## Interacting with production app
@@ -26,3 +28,8 @@ TODO
 
 TODO
 
+[travis-url]: https://travis-ci.org/inakianduaga/scala-play-car-advert
+[travis-image]: https://travis-ci.org/inakianduaga/scala-play-car-advert.svg?branch=master
+
+[coveralls-url]: https://coveralls.io/r/inakianduaga/scala-play-car-advert
+[coveralls-image]: https://coveralls.io/repos/inakianduaga/scala-play-car-advert/badge.png
