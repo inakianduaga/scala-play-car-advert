@@ -2,7 +2,6 @@ package models
 import java.text.SimpleDateFormat
 import java.util.Date
 import scala.util.{Try, Success, Failure}
-import java.text.ParseException
 import Fuel._
 
 case class AdvertUsedCar(
@@ -17,26 +16,24 @@ case class AdvertUsedCar(
 
   }
 
-object AdvertUsedCar {
+object AdvertUsedCar extends AdvertCarTrait {
 
   /**
     * Special constructor to easily generate model:
     *  - Id will get generated automatically if not provided
     */
-  def apply(id: Option[String], title: String, fuel: String, price: Int, _new: Boolean, mileage: Int, firstRegistration: String) =
-    validate(fuel= fuel, date = firstRegistration, title = title, mileage = mileage).map(x => {
-      val id = normalizeId(id)
-      val date = dateFromString(date).get
-      val fuel = Fuel.fromString(fuel).get
+  def apply(_id: Option[String], title: String, _fuel: String, price: Int, mileage: Int, firstRegistration: String) =
+    validate(fuel= _fuel, price = price, date = firstRegistration, title = title, mileage = mileage).map(x => {
+      val id = normalizeId(_id)
+      val date = dateFromString(firstRegistration).get
+      val fuel = Fuel.fromString(_fuel).get
 
-      new AdvertUsedCar(id, title = title, fuel = fuel, price = price, _new = _new, mileage = mileage, firstRegistration = date)
+      new AdvertUsedCar(id, title = title, fuel = fuel, price = price, _new = false, mileage = mileage, firstRegistration = date)
     })
 
-  private def validate(fuel: String, date: String, title: String, mileage: Int): Try[Unit] = {
+  private def validate(fuel: String, price: Int, date: String, title: String, mileage: Int): Try[Unit] = {
 
     def validateDate(s: String): Try[Unit]      = dateFromString(s).map(_ => Unit)
-    def validateFuel(s: String): Try[Unit]      = if (Fuel.isFuelType(s)) Success(Unit) else Failure (new Throwable("Invalid fuel type"))
-    def validateTitle(s: String): Try[Unit]     = if(s.length > 0) Success(Unit) else Failure(new Throwable("Title must be non-empty"))
     def validateMileage(amount: Int): Try[Unit] = if(amount > 0) Success(Unit) else Failure(new Throwable("Mileage must be non-zero"))
 
     // Return first exception or success
@@ -44,16 +41,16 @@ object AdvertUsedCar {
       validateFuel(fuel),
       validateDate(date),
       validateTitle(title),
+      validatePrice(price),
       validateMileage(mileage)
     )
       .find(validation => validation.isFailure)
       .getOrElse(Success(Unit))
   }
 
-  private def dateFromString(string: String): Try[Date] = Try(SimpleDateFormat.parse(string))
-
-  private def normalizeId(id: Option[String]): String = id.getOrElse(generateUuid())
-
-  private def generateUuid(): String = java.util.UUID.randomUUID.toString
+  /**
+    * http://stackoverflow.com/questions/16910344/how-to-convert-string-into-date-time-format-in-java
+    */
+  private def dateFromString(string: String): Try[Date] = Try(new SimpleDateFormat("yyyy/MM/dd").parse(string))
 
 }
