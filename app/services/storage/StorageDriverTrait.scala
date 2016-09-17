@@ -1,6 +1,4 @@
 package services.storage
-import models.AdvertUsedCar
-import models.AdvertNewCar
 import scala.util.Try
 
 trait StorageDriverTrait {
@@ -8,14 +6,17 @@ trait StorageDriverTrait {
   /**
     * Returns all adverts
     */
-  def index() : Try[List[Either[AdvertUsedCar, AdvertNewCar]]]
+  def index() : Try[Seq[StorableTrait]]
 
-  def show(id: String): Try[Either[AdvertUsedCar, AdvertNewCar]]
+  def show(id: String): Try[StorableTrait]
 
-  def create(advert: StorableTrait): Try[Either[AdvertUsedCar, AdvertNewCar]]
+  def delete(id: String): Try[Unit]
 
-  def update(update: Either[AdvertUsedCar, AdvertNewCar]): Try[Either[AdvertUsedCar, AdvertNewCar]]
+  /**
+    * Note: Create throws an exception if the advert already exists
+    */
+  def create(advert: StorableTrait): Try[Unit]
 
-  def delete(advert: Either[AdvertUsedCar, AdvertNewCar]): Try[Unit]
+  def update(update: StorableTrait): Try[Unit]
 
 }

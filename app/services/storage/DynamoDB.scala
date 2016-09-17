@@ -2,9 +2,12 @@ package services.storage
 
 import javax.inject.Inject
 
-import awscala._, dynamodbv2._
+import awscala._
+import dynamodbv2._
 
-class DynamoDB @Inject() (configuration: play.api.Configuration) {
+import scala.util.{Failure, Try, Success}
+
+class DynamoDB @Inject() (configuration: play.api.Configuration) extends StorageDriverTrait {
 
   // Read config
   val region = configuration.underlying.getString("aws.dynamoDB.region")
@@ -14,7 +17,47 @@ class DynamoDB @Inject() (configuration: play.api.Configuration) {
   implicit val dynamoDB = DynamoDB.at(Region(region))
   val table: Table = dynamoDB.table(tableName).get
 
-  def put(id: String, attributes: Seq[String, Any]): Unit = table.put(id, attributes)
 
-  def put(id: String, attributes: Seq[String, Any]): Unit = table.put(id, attributes)
+  // CRUD //
+
+  def index(): Try[Seq[StorableTrait]] = Try {
+    table.scan(Seq("id" -> cond.isNotNull)).map(Storable(_))
+  }
+
+  def show(id: String): Try[StorableTrait] = {
+    val item = table.get(id)
+    if(item.isDefined) Success(Storable(item = item.get)) else Failure(new Throwable(s"advert w/ id $id not found"))
+  }
+
+  def update(data: StorableTrait): Try[Unit] = Try {
+    table.put(data.id, data.attributes)
+  }
+
+  /**
+    * If item doesn't exist, try to create it, otherwise fail
+    */
+  def create(data: StorableTrait): Try[Unit] = {
+    val item = show(data.id)
+    item match {
+      case item.failed => Try { table.put(data.id, data.attributes) }
+      case _ => Failure(new Throwable("Item already exists"))
+    }
+  }
+
+  def delete(id: String): Try[Unit] = Try {
+    table.delete(id)
+  }
+
+  /**
+    * Convert DynamoDB Item to StorableTrait-compatible class
+    */
+  case class Storable(_attributes: Seq[(String, Any)]) extends StorableTrait {
+    val id = this._attributes.find(entry => entry._1 == id).get._2
+    val attributes = this._attributes.filter(entry => entry._1 != id)
+  }
+
+  object Storable {
+    def apply(item: Item): StorableTrait =  Storable(item.attributes.map(a => (a.name, a.value)))
+  }
+
 }
