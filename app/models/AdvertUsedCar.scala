@@ -34,17 +34,20 @@ object AdvertUsedCar {
 
   private def validate(fuel: String, date: String, title: String, mileage: Int): Try[Unit] = {
 
-    def validateFuel(s: String): Try[Unit] = if (Fuel.isFuelType(s)) Success(Unit) else Failure (new Throwable("Invalid fuel type"))
-
-    def validateDate(s: String): Try[Unit] = dateFromString(s).map(_ => Unit)
-
-    def validateTitle(s: String): Try[Unit] = if(s.length > 0) Success(Unit) else Failure(new Throwable("Title must be non-empty"))
-
+    def validateDate(s: String): Try[Unit]      = dateFromString(s).map(_ => Unit)
+    def validateFuel(s: String): Try[Unit]      = if (Fuel.isFuelType(s)) Success(Unit) else Failure (new Throwable("Invalid fuel type"))
+    def validateTitle(s: String): Try[Unit]     = if(s.length > 0) Success(Unit) else Failure(new Throwable("Title must be non-empty"))
     def validateMileage(amount: Int): Try[Unit] = if(amount > 0) Success(Unit) else Failure(new Throwable("Mileage must be non-zero"))
 
-    // TODO: Merge all tries into a collection, maybe flatmapping the different tries?
-
-    validateFuel(fuel) && validateDate(date) && validateTitle(title) && validateMileage(mileage)
+    // Return first exception or success
+    List(
+      validateFuel(fuel),
+      validateDate(date),
+      validateTitle(title),
+      validateMileage(mileage)
+    )
+      .find(validation => validation.isFailure)
+      .getOrElse(Success(Unit))
   }
 
   private def dateFromString(string: String): Try[Date] = Try(SimpleDateFormat.parse(string))
@@ -52,7 +55,5 @@ object AdvertUsedCar {
   private def normalizeId(id: Option[String]): String = id.getOrElse(generateUuid())
 
   private def generateUuid(): String = java.util.UUID.randomUUID.toString
-
-
 
 }
