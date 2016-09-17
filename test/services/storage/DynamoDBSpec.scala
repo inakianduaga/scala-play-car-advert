@@ -1,6 +1,6 @@
 package services.storage
 
-import javax.inject.Inject
+import javax.inject._
 import org.scalatestplus.play._
 import awscala.dynamodbv2._
 import com.amazonaws.services.{ dynamodbv2 => aws }
@@ -11,19 +11,24 @@ import org.scalatest.BeforeAndAfter
 /**
   * NOTE: A DynamoDB database must be runinng locally on port 8000 for these tests to work (see ./docker/dynamoDB/README.md)
   */
-class DynamoDBSpec @Inject() (configuration: play.api.Configuration, service: Service) extends PlaySpec with BeforeAndAfter {
+class DynamoDBSpec extends PlaySpec with BeforeAndAfter {
 
   case class Storable(id: String, attributes: Seq[(String, Any)]) extends StorableTrait {}
 
   // Set local endpoint
   implicit val dynamoDB = DynamoDB.local()
+
+  // Manually wire dependencies (injection through guice doesn't work)
+  val configuration = play.api.Configuration()
+  val service = new Service(configuration)
   val tableName = configuration.underlying.getString("aws.dynamoDB.table")
 
   /**
-    * Recreate database before each test and seed it with some data
+    * Recreate database after each test
     * https://github.com/seratch/AWScala/blob/master/src/test/scala/awscala/DynamoDBV2Spec.scala#L18
     */
   before {
+
     // destroy table
     dynamoDB.table(tableName).get.destroy()
 
@@ -33,6 +38,8 @@ class DynamoDBSpec @Inject() (configuration: play.api.Configuration, service: Se
       hashPK = "id" -> AttributeType.String
     )
 
+    // Wait for table to be activated
+    // https://github.com/seratch/AWScala/blob/master/src/test/scala/awscala/DynamoDBV2Spec.scala#L25
     println(s"Waiting for DynamoDB table activation...")
     var isTableActivated = false
     while (!isTableActivated) {
@@ -46,12 +53,10 @@ class DynamoDBSpec @Inject() (configuration: play.api.Configuration, service: Se
     println(s"Created DynamoDB table has been activated.")
 
     // Populate database w/ test data
-    println("seeding database")
-    service.create(Storable("2", Seq("field" -> "value2")))
     service.create(Storable("1", Seq("field" -> "value")))
+    service.create(Storable("2", Seq("field" -> "value2")))
     service.create(Storable("3", Seq("field" -> "value3")))
     service.create(Storable("foobar", Seq("field" -> "value3")))
-
   }
 
   "DynamoDB storage service" must {
