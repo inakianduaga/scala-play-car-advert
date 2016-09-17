@@ -51,6 +51,6 @@ object AdvertUsedCar extends AdvertCarTrait {
   /**
     * http://stackoverflow.com/questions/16910344/how-to-convert-string-into-date-time-format-in-java
     */
-  private def dateFromString(string: String): Try[Date] = Try(new SimpleDateFormat("yyyy/MM/dd").parse(string))
+  private def dateFromString(string: String): Try[Date] = Try(new SimpleDateFormat("yyyy-MM-dd").parse(string))
 
 }
