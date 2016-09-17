@@ -1,12 +1,13 @@
 package services.storage
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 
 import awscala._
 import dynamodbv2._
 
-import scala.util.{Failure, Try, Success}
+import scala.util.{Failure, Success, Try}
 
+@Singleton
 class DynamoDB @Inject() (configuration: play.api.Configuration) extends StorageDriverTrait {
 
   // Read config
