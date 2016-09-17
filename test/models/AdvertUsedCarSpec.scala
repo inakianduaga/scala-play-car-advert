@@ -1,23 +1,34 @@
 package models
 
 import java.text.SimpleDateFormat
-
 import org.scalatestplus.play._
+import play.api.libs.json.Json
 
 class AdvertUsedCarSpec extends PlaySpec {
 
   "A Constructor" must {
-    "should fail when mileage empty" in {
-      assert(AdvertUsedCar(Some("12313"), "BMW M3", "Gasoline", 55, 0, "2016-05-12").failed.get.getMessage == "Mileage must be non-zero")
-    }
-    "should fail when date format is incorrect" in {
-      assert(AdvertUsedCar(Some("12313"), "BMW M3", "Gasoline", 55, 100, "notADate").isFailure)
-    }
-    "should parse date correctly" in {
-      val compareTo = new SimpleDateFormat("yyyy-MM-dd").parse("2016-05-12")
-      assert(AdvertUsedCar(Some("12313"), "BMW M3", "Gasoline", 55, 100, "2016-05-12").get.firstRegistration.equals(compareTo))
+
+    "fail when mileage is empty" in {
+      val json = Json.parse(
+        """ { "id" : "12313", "title": "BMW M3", "fuel": "Diesel", "price": 55, "mileage": 0, "first_registration": "2016-05-12" } """
+      )
+      assert(AdvertUsedCar(json).failed.get.getMessage == "Mileage must be non-zero")
     }
 
+    "fail when date format is incorrect" in {
+      val json = Json.parse(
+        """ { "id" : "12313", "title": "BMW M3", "fuel": "Gasoline", "price": 55, "mileage": 1000, "first_registration": "notADate" } """
+      )
+      assert(AdvertUsedCar(json).isFailure)
+
+    }
+    "parse date correctly" in {
+      val compareTo = new SimpleDateFormat("yyyy-MM-dd").parse("2016-05-12")
+      val json = Json.parse(
+        """ { "id" : "12313", "title": "BMW M3", "fuel": "Gasoline", "price": 55, "mileage": 1000, "first_registration": "2016-05-12" } """
+      )
+      assert(AdvertUsedCar(json).get.firstRegistration.equals(compareTo))
+    }
   }
 
 }

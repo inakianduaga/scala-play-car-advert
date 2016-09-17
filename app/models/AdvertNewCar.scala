@@ -34,10 +34,10 @@ object AdvertNewCar extends ValidationTrait {
     */
   def apply(json: JsValue): Try[AdvertNewCar] = Try {
 
-    val _id = (json \ "id").toOption.map(_.toString())
-    val title = (json \ "title").get.toString
-    val _fuel = (json \ "fuel").get.toString
-    val price = (json \ "price").get.toString.toInt
+    val _id = (json \ "id").toOption.map(_.toString)
+    val title = (json \ "title").as[String]
+    val _fuel = (json \ "fuel").as[String]
+    val price = (json \ "price").as[Int]
 
     validate(fuel= _fuel, title = title, price = price).map(x => {
       val id = normalizeId(_id)
