@@ -2,10 +2,11 @@ package models
 
 import java.text.SimpleDateFormat
 import java.util.Date
-import play.api.libs.json.JsValue
+import play.api.libs.json._
 import scala.util.{Failure, Success, Try}
 
 import Fuel._
+import services.json.JsonableTrait
 import services.validation.ValidationTrait
 import services.storage.StorableTrait
 
@@ -17,7 +18,7 @@ case class AdvertUsedCar(
                          _new: Boolean,
                          mileage: Int,
                          firstRegistration: Date
-                       ) extends StorableTrait {
+                       ) extends StorableTrait with JsonableTrait {
 
     def attributes: Seq[(String, Any)] = {
       Seq(
@@ -29,6 +30,19 @@ case class AdvertUsedCar(
         "firstRegistration" -> this.firstRegistration.formatted("yyyy-MM-dd")
       )
     }
+
+    def toJson: JsValue = JsObject(
+      Seq(
+        "id" -> JsString(this.id),
+        "title" -> JsString(this.title),
+        "fuel" -> JsString(this.fuel.toString),
+        "price" -> JsNumber(this.price),
+        "new" -> JsBoolean(this._new),
+        "mileage" -> JsNumber(this.mileage),
+        "first_registration" -> JsString(this.firstRegistration.formatted("yyyy-MM-dd"))
+      )
+    )
+
   }
 
 object AdvertUsedCar extends ValidationTrait {

@@ -1,11 +1,13 @@
 package models
 
-import Fuel._
 import play.api.libs.json._
+import play.api.libs.functional.syntax._
+import scala.util.{Success, Try}
+
+import Fuel._
+import services.json.JsonableTrait
 import services.validation.ValidationTrait
 import services.storage.StorableTrait
-
-import scala.util.{Success, Try}
 
 case class AdvertNewCar(
                        id: String,
@@ -13,7 +15,7 @@ case class AdvertNewCar(
                        fuel: Fuel,
                        price: Int,
                        _new: Boolean
-                       )  extends StorableTrait {
+                       )  extends StorableTrait with JsonableTrait {
 
   def attributes: Seq[(String, Any)] = {
     Seq(
@@ -23,6 +25,19 @@ case class AdvertNewCar(
       "new" -> this._new
     )
   }
+
+  def toJson: JsValue = JsObject(
+    Seq(
+      "id" -> JsString(this.id),
+      "title" -> JsString(this.title),
+      "fuel" -> JsString(this.fuel.toString),
+      "price" -> JsNumber(this.price),
+      "new" -> JsBoolean(this._new),
+      "mileage" -> JsNumber(0),
+      "first_registration" -> JsNull
+    )
+  )
+
 }
 
 object AdvertNewCar extends ValidationTrait {
