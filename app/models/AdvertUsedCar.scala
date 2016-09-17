@@ -23,36 +23,31 @@ object AdvertUsedCar {
     * Special constructor to easily generate model:
     *  - Id will get generated automatically if not provided
     */
-  def apply(id: Option[String], title: String, fuel: String, price: Int, _new: Boolean, mileage: Int, firstRegistration: String) = {
-    if(validate(fuel= fuel, date = firstRegistration, title = title, mileage = mileage)) {
+  def apply(id: Option[String], title: String, fuel: String, price: Int, _new: Boolean, mileage: Int, firstRegistration: String) =
+    validate(fuel= fuel, date = firstRegistration, title = title, mileage = mileage).map(x => {
       val id = normalizeId(id)
       val date = dateFromString(date).get
       val fuel = Fuel.fromString(fuel).get
 
       new AdvertUsedCar(id, title = title, fuel = fuel, price = price, _new = _new, mileage = mileage, firstRegistration = date)
-    }
-  }
+    })
 
-  private def validate(fuel: String, date: String, title: String, mileage: Int): Boolean = {
+  private def validate(fuel: String, date: String, title: String, mileage: Int): Try[Unit] = {
 
-    def validateFuel(s: String): Boolean = Fuel.isFuelType(s)
+    def validateFuel(s: String): Try[Unit] = if (Fuel.isFuelType(s)) Success(Unit) else Failure (new Throwable("Invalid fuel type"))
 
-    def validateDate(s: String): Boolean = dateFromString(s).isSuccess
+    def validateDate(s: String): Try[Unit] = dateFromString(s).map(_ => Unit)
 
-    def validateTitle(s: String): Boolean = s.length > 0
+    def validateTitle(s: String): Try[Unit] = if(s.length > 0) Success(Unit) else Failure(new Throwable("Title must be non-empty"))
 
-    def validateMileage(amount: Int): Boolean = amount > 0
+    def validateMileage(amount: Int): Try[Unit] = if(amount > 0) Success(Unit) else Failure(new Throwable("Mileage must be non-zero"))
+
+    // TODO: Merge all tries into a collection, maybe flatmapping the different tries?
 
     validateFuel(fuel) && validateDate(date) && validateTitle(title) && validateMileage(mileage)
   }
 
-  private def dateFromString(string: String): Try[Date] = {
-    try {
-      Success(SimpleDateFormat.parse(string))
-    } catch {
-      case e: ParseException => Failure(e)
-    }
-  }
+  private def dateFromString(string: String): Try[Date] = Try(SimpleDateFormat.parse(string))
 
   private def normalizeId(id: Option[String]): String = id.getOrElse(generateUuid())
 
