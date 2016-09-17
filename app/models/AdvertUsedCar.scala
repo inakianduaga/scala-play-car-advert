@@ -27,7 +27,7 @@ case class AdvertUsedCar(
         "price" -> this.price,
         "new" -> this._new,
         "mileage" -> this.mileage,
-        "firstRegistration" -> this.firstRegistration.formatted("yyyy-MM-dd")
+        "firstRegistration" -> new SimpleDateFormat("yyyy-MM-dd").format(this.firstRegistration)
       )
     }
 
@@ -39,7 +39,7 @@ case class AdvertUsedCar(
         "price" -> JsNumber(this.price),
         "new" -> JsBoolean(this._new),
         "mileage" -> JsNumber(this.mileage),
-        "first_registration" -> JsString(this.firstRegistration.formatted("yyyy-MM-dd"))
+        "first_registration" -> JsString(new SimpleDateFormat("yyyy-MM-dd").format(this.firstRegistration))
       )
     )
 
@@ -54,7 +54,7 @@ object AdvertUsedCar extends ValidationTrait {
     */
   def apply(json: JsValue): Try[AdvertUsedCar] = Try {
 
-    val _id = (json \ "id").toOption.map(_.toString)
+    val _id = (json \ "id").toOption.map(_.as[String])
     val title = (json \ "title").as[String]
     val _fuel = (json \ "fuel").as[String]
     val price = (json \ "price").as[Int]

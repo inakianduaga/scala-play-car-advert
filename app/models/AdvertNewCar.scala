@@ -33,7 +33,7 @@ case class AdvertNewCar(
       "fuel" -> JsString(this.fuel.toString),
       "price" -> JsNumber(this.price),
       "new" -> JsBoolean(this._new),
-      "mileage" -> JsNumber(0),
+      "mileage" -> JsNull,
       "first_registration" -> JsNull
     )
   )
@@ -49,7 +49,7 @@ object AdvertNewCar extends ValidationTrait {
     */
   def apply(json: JsValue): Try[AdvertNewCar] = Try {
 
-    val _id = (json \ "id").toOption.map(_.toString)
+    val _id = (json \ "id").toOption.map(_.as[String])
     val title = (json \ "title").as[String]
     val _fuel = (json \ "fuel").as[String]
     val price = (json \ "price").as[Int]

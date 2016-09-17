@@ -31,4 +31,21 @@ class AdvertUsedCarSpec extends PlaySpec {
     }
   }
 
+
+  "A model" must {
+
+    "serialize successfully to json" in {
+      val json = Json.parse(
+        """ { "id" : "abcde", "title": "BMW M3", "fuel": "Diesel", "price": 55, "mileage": 1000, "first_registration": "2016-05-12"} """
+      )
+      val expectedJson = Json.parse(
+        """ { "id" : "abcde", "title": "BMW M3", "fuel": "Diesel", "price": 55, "new": false, "mileage": 1000, "first_registration": "2016-05-12" } """
+      )
+      val outputJson = AdvertUsedCar(json).get.toJson
+
+      outputJson.mustEqual(expectedJson)
+    }
+
+  }
+
 }
