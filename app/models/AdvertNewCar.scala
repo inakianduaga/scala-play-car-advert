@@ -1,6 +1,9 @@
 package models
 
 import Fuel._
+import services.validation.ValidationTrait
+import services.storage.StorableTrait
+
 import scala.util.{Success, Try}
 
 case class AdvertNewCar(
@@ -9,16 +12,20 @@ case class AdvertNewCar(
                        fuel: Fuel,
                        price: Int,
                        _new: Boolean
-                       ) {
+                       )  extends StorableTrait {
+
+  def toJson: String = {
+    ""
+  }
 }
 
-object AdvertNewCar extends AdvertCarTrait {
+object AdvertNewCar extends ValidationTrait {
 
   /**
     * Special constructor to easily generate model:
     *  - Id will get generated automatically if not provided
     */
-  def apply(_id: Option[String], title: String, _fuel: String, price: Int) =
+  def apply(_id: Option[String], title: String, _fuel: String, price: Int): Try[AdvertNewCar] =
     validate(fuel= _fuel, title = title, price = price).map(x => {
       val id = normalizeId(_id)
       val fuel = Fuel.fromString(_fuel).get

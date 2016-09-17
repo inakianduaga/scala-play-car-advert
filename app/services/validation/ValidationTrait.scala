@@ -1,8 +1,10 @@
-package models
+package services.validation
+
+import models.Fuel
 
 import scala.util.{Failure, Success, Try}
 
-trait AdvertCarTrait {
+trait ValidationTrait {
 
   def normalizeId(id: Option[String]): String = id.getOrElse(generateUuid())
 

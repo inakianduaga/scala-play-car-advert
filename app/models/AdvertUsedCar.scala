@@ -1,8 +1,11 @@
 package models
 import java.text.SimpleDateFormat
 import java.util.Date
-import scala.util.{Try, Success, Failure}
+
+import scala.util.{Failure, Success, Try}
 import Fuel._
+import services.validation.ValidationTrait
+import services.storage.StorableTrait
 
 case class AdvertUsedCar(
                          id: String,
@@ -12,17 +15,21 @@ case class AdvertUsedCar(
                          _new: Boolean,
                          mileage: Int,
                          firstRegistration: Date
-                       ) extends AdvertCarTrait {
+                       ) extends StorableTrait {
+
+    def toJson: String = {
+      ""
+    }
 
   }
 
-object AdvertUsedCar extends AdvertCarTrait {
+object AdvertUsedCar extends ValidationTrait {
 
   /**
     * Special constructor to easily generate model:
     *  - Id will get generated automatically if not provided
     */
-  def apply(_id: Option[String], title: String, _fuel: String, price: Int, mileage: Int, firstRegistration: String) =
+  def apply(_id: Option[String], title: String, _fuel: String, price: Int, mileage: Int, firstRegistration: String): Try[AdvertUsedCar] =
     validate(fuel= _fuel, price = price, date = firstRegistration, title = title, mileage = mileage).map(x => {
       val id = normalizeId(_id)
       val date = dateFromString(firstRegistration).get
