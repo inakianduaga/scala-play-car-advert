@@ -20,4 +20,6 @@ deploy:
     repo: inakianduaga/scala-play-car-advert
     tags: true
 after_success:
-  - sbt coverageReport coveralls
+  # Dump current Travis Env into file
+  - printenv > .env
+  - docker run --rm --env-file=.env -v $PWD:/root sbt coverageReport coveralls
