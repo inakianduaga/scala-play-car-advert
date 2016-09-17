@@ -14,8 +14,13 @@ case class AdvertNewCar(
                        _new: Boolean
                        )  extends StorableTrait {
 
-  def toJson: String = {
-    ""
+  def attributes: Seq[(String, Any)] = {
+    Seq(
+      "title" -> this.title,
+      "fuel" -> this.fuel.toString,
+      "price" -> this.price,
+      "new" -> this._new
+    )
   }
 }
 

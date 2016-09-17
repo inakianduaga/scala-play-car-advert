@@ -14,7 +14,6 @@ class DynamoDB @Inject() (configuration: play.api.Configuration) {
   implicit val dynamoDB = DynamoDB.at(Region(region))
   val table: Table = dynamoDB.table(tableName).get
 
-
   def put(id: String, attributes: Seq[String, Any]): Unit = table.put(id, attributes)
 
   def put(id: String, attributes: Seq[String, Any]): Unit = table.put(id, attributes)
