@@ -7,7 +7,7 @@ script:
 - docker build -t sbt ./docker/sbt
 - docker build -t dynamodb ./docker/dynamodb
 # Launch dynamoDB container so DB tests can run
-- docker run -d -p 8000:8000 -e "TABLE=ScalaPlayCarAdverts" dynamodb
+- docker run -d -p 8000:8000 -e "TABLE=ScalaPlayCarAdverts" --name dynamodb dynamodb
 # Run stylechecker
 - docker run --rm -v $PWD:/root sbt scalastyle
 # Compile and run tests
