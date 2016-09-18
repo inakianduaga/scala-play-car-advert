@@ -71,7 +71,7 @@ class DynamoDB @Inject() (configuration: play.api.Configuration) extends Storage
     * Convert DynamoDB Item to StorableTrait-compatible class
     */
   case class Storable(_attributes: Seq[(String, Any)]) extends StorableTrait {
-    val id: String = this._attributes.find(entry => entry._1 == "id").get._1
+    val id: String = this._attributes.find(entry => entry._1 == "id").get._2.asInstanceOf[String]
     val attributes = this._attributes.filter(entry => entry._1 != id)
   }
 

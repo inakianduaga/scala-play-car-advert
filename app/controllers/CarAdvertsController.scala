@@ -22,7 +22,7 @@ class CarAdvertsController @Inject() (storage: StorageDriverTrait) extends Contr
 
     // Since it's quite hard handle all Try's until the very end, we wrap the call in a Try
     // and let the inner Trys rethrow when accessing them unsafely (.get)
-    val entries: Try[Seq[JsValue]] = Try {
+    val operation: Try[Seq[JsValue]] = Try {
       storage
         .index()                                                  // Fetch all results as Seq[Storable]
         .get                                                      // Unwrap Try
@@ -32,10 +32,12 @@ class CarAdvertsController @Inject() (storage: StorageDriverTrait) extends Contr
         .map(_.fold(_.toJson, _.toJson))                          // Convert Advert to Json
     }
 
-    entries                                                       // Generate Response
+    operation                                                     // Generate Response
       .map(Json.toJson(_))                                        // Convert List to Json
       .map(Ok(_))
-      .getOrElse(BadRequest)
+      .getOrElse(
+        BadRequest(JsString(operation.failed.get.getMessage))
+      )
   }
 
   def show(id: String): Action[AnyContent] = Action {
@@ -47,7 +49,7 @@ class CarAdvertsController @Inject() (storage: StorageDriverTrait) extends Contr
     operation
       .map(Ok(_))                                                 // Serve response
       .getOrElse(
-        BadRequest(JsString(operation.failed.get.getMessage))
+        NotFound(JsString(operation.failed.get.getMessage))       // We'll assume exceptions are due to 404, so use 404 status
       )
   }
 
