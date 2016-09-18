@@ -33,8 +33,6 @@ deploy:
       repo: inakianduaga/scala-play-car-advert
       tags: true
 after_success:
-  # Launch dynamoDB container so DB tests can run
-  #- docker run -d -p 8000:8000 -e "TABLE=ScalaPlayCarAdverts" --name dynamodb dynamodb
   # Dump current Travis Env into file
   - printenv > .env
   - docker run --rm --env-file=.env -v $PWD:/root --link dynamodb -e "LOCAL_DYNAMO_DB_ENDPOINT=http://dynamodb:8000" sbt coverageReport coveralls
