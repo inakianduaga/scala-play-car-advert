@@ -11,12 +11,10 @@ import scala.util.{Failure, Success, Try}
 class DynamoDB @Inject() (configuration: play.api.Configuration) extends StorageDriverTrait {
 
   // Read config
-  val region = configuration.underlying.getString("aws.dynamoDB.region")
-  val tableName = configuration.underlying.getString("aws.dynamoDB.table")
+  val tableName = configuration.getString("aws.dynamoDB.table").get
 
   // Initialize client and read table
-  implicit val dynamoDB = DynamoDB.at(Region(region))
-
+  implicit val dynamoDB = dynamoClient
   val table: Table = dynamoDB.table(tableName).get
 
   // CRUD //
@@ -50,6 +48,22 @@ class DynamoDB @Inject() (configuration: play.api.Configuration) extends Storage
 
   def delete(id: String): Try[Unit] = Try {
     table.delete(id)
+  }
+
+  private def dynamoClient = {
+    val isLocal: Boolean = configuration.getBoolean("aws.dynamoDB.local").get
+    val localEndpoint = configuration.getString("aws.dynamoDB.localEndpoint").get
+
+    if(isLocal) {
+      val client = DynamoDB.local()
+      client.setEndpoint(localEndpoint)
+      client
+    }
+    else {
+      // Read config
+      val region = configuration.getString("aws.dynamoDB.region").get
+      DynamoDB.at(Region(region))
+    }
   }
 
   /**
