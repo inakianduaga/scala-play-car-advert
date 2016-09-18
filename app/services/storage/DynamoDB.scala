@@ -12,6 +12,7 @@ class DynamoDB @Inject() (configuration: play.api.Configuration) extends Storage
 
   // Read config
   val region = configuration.underlying.getString("aws.dynamoDB.region")
+  println(region)
   val tableName = configuration.underlying.getString("aws.dynamoDB.table")
 
   // Initialize client and read table

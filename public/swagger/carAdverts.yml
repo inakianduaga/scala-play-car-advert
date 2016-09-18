@@ -37,7 +37,15 @@ paths:
       parameters:
         - name: "sortBy"
           in: "query"
-          type: integer
+          type: string
+          enum:
+             - id
+             - title,
+             - fuel,
+             - price,
+             - new,
+             - mileage,
+             - first_registration
           required: false
           description: "How to sort results"
       responses:

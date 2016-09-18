@@ -4,7 +4,7 @@ import javax.inject._
 
 import models._
 import play.api._
-import play.api.libs.json.JsValue
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, _}
 import services.storage.StorageDriverTrait
 
@@ -28,10 +28,12 @@ class CarAdvertsController @Inject() (storage: StorageDriverTrait) extends Contr
         .get                                              // Unwrap Try
         .map(StorableConverter.toAdvert)                  // Convert Storables to Adverts
         .map(_.get)                                       // Unwrap Try
+        .sortBy(advert => advert.fold(_.id, _.id))        // Sort List: TODO: Add case class w/ sorting for each field
         .map(_.fold(_.toJson, _.toJson))                  // Convert Advert to Json
     }
 
     entries                                               // Generate Response
+      .map(Json.toJson(_))                                // Convert List to Json
       .map(Ok(_))
       .getOrElse(BadRequest)
   }
