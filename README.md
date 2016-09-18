@@ -17,6 +17,7 @@ Use the [Swagger UI official-hosted client](http://petstore.swagger.io/?url=http
 The entire application **is dockerized** and can be run locally easily w/ minimal dependencies.
 
 **Requirements:**
+
  [Docker](https://docs.docker.com/engine/installation/), [Docker Compose](https://docs.docker.com/compose/install/) must be installed
  
 **Installation:**
