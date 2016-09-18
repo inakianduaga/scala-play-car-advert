@@ -24,7 +24,9 @@ The entire application **is dockerized** and can be run locally easily w/ minima
 
 From the `./docker` folder
 1. Build docker containers for dynamoDB and SBT by running `docker-compose build`
+
 2. Spin up Play app & DynamoDB: `docker-compose up -d` (first run will take a while because SBT needs to populate the cache). App will be reachable on [http://localhost:9000](http://localhost:9000)
+
 3. API can be tested through the [Swagger UI](http://petstore.swagger.io/?url=http://localhost:9000/swagger/car/adverts/spec.yml) endpoint. Local DynamoDB [provides a shell UI](http://localhost:8000/shell/) as well to query DB directly       
 
 ## Tests:
