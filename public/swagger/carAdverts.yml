@@ -1,0 +1,189 @@
+---
+swagger: "2.0"
+
+################################################################################
+#                              API Information                                 #
+################################################################################
+
+info:
+  version: "1"
+  title: "AutoScout24 Cart Advert API"
+  description: "Simple CRUD REST api for managing car adverts"
+  contact:
+    name: "Inaki Anduaga"
+    email: "inaki@inakianduaga.com"
+    url: "github.com/inakianduaga/scala-play-car-advert"
+
+################################################################################
+#                  Host, Base Path, Schemes and Content Types                  #
+################################################################################
+#
+basePath: "/"
+schemes:
+- "http"
+- "https"
+produces:
+  - application/json
+consumes:
+  - application/json
+
+################################################################################
+#                                           Paths                              #
+################################################################################
+
+paths:
+
+  /car/adverts:
+    get:
+      description: "List all adverts"
+      parameters:
+        - name: "sortBy"
+          in: "query"
+          type: string
+          enum:
+             - id
+             - title
+             - fuel
+             - price
+             - new
+             - mileage
+             - first_registration
+          required: false
+          description: "How to sort results"
+          default: id
+      responses:
+        200:
+          description: "The list of adverts, sorted by the given criteria (default is by id)"
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/CarAdvertResponse'
+
+    post:
+      description: "Create a car advert"
+      parameters:
+      - in: "body"
+        name: "payload"
+        required: true
+        schema:
+          $ref: "#/definitions/CarAdvert"
+      responses:
+        200:
+          description: "The car advert"
+          schema:
+            $ref: '#/definitions/CarAdvertResponse'
+        400:
+          description: "Invalid data"
+          schema:
+            $ref: '#/definitions/ValidationFailedException'
+
+  /car/adverts/{id}:
+    parameters:
+      - name: "id"
+        in: "path"
+        type: "string"
+        required: true
+        description: "the advert id"
+
+    get:
+      description: "List advert information"
+      responses:
+        200:
+          description: "The list of adverts, sorted by the given criteria (default is by id)"
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/CarAdvertResponse'
+        404:
+          description: "Car advert not found"
+          schema:
+            $ref: '#/definitions/NotFoundException'
+
+    put:
+      description: "Update a car advert. Requires sending the entire payload (doesn't support partial updates)"
+      parameters:
+      - in: "body"
+        name: "payload"
+        required: true
+        schema:
+          $ref: "#/definitions/CarAdvert"
+      responses:
+        200:
+          description: "The car advert"
+          schema:
+            $ref: '#/definitions/CarAdvertResponse'
+        404:
+          description: "Car advert not found for the given id"
+          schema:
+            $ref: '#/definitions/NotFoundException'
+        400:
+          description: "Invalid data"
+          schema:
+            $ref: '#/definitions/ValidationFailedException'
+
+    delete:
+      description: "Delete a car advert"
+      responses:
+        200:
+          description: "An empty response"
+          schema:
+            $ref: '#/definitions/AckEmptyResponse'
+        404:
+          description: "Car advert not found for the given id"
+          schema:
+            $ref: '#/definitions/NotFoundException'
+
+################################################################################
+#                                 Definitions                                  #
+################################################################################
+
+
+definitions:
+  CarAdvert:
+    type: "object"
+    required:
+     - title
+     - fuel
+     - price
+     - new
+    properties:
+      title:
+        type: "string"
+        description: "The title, e.g. Audi A4 Avant"
+      fuel:
+        type: "string"
+        enum:
+           - Gasoline
+           - Diesel,
+        description: "The vehicle's fuel type"
+      price:
+        type: "integer"
+        description: "The car's price"
+      new:
+        type: "boolean"
+        description: "indicates if car is new or used"
+      mileage:
+        type: "integer"
+        description: "(only for used cars)"
+      first_registration:
+        type: "string"
+        format: date
+        description: "(only for used cars) Y-m-d format, e.g. 2015-12-31"
+
+  CarAdvertResponse:
+     type: "object"
+     allOf:
+       - $ref: '#/definitions/CarAdvert' # Inherits all properties of CarAdvert
+       - properties:
+          id:
+            type: "integer"
+            description: "The unique advert id (backend-generated)"
+
+  NotFoundException:
+     type: string
+
+  ValidationFailedException:
+       type: string
+
+  AckEmptyResponse:
+    type: string

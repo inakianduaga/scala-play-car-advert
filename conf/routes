@@ -1,0 +1,14 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# REST endpoints
+GET     /car/adverts                controllers.CarAdvertsController.index(sortBy: Option[String])
+POST    /car/adverts                controllers.CarAdvertsController.create()
+GET     /car/adverts/:id            controllers.CarAdvertsController.show(id: String)
+PUT     /car/adverts/:id            controllers.CarAdvertsController.update(id: String)
+DELETE  /car/adverts/:id            controllers.CarAdvertsController.delete(id: String)
+
+# Serve Swagger spec using static resource controller
+GET     /swagger/car/adverts/spec.yml        controllers.Assets.versioned(path="/public/swagger", file="carAdverts.yml")
+

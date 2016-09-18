@@ -1,0 +1,30 @@
+version: '2'
+services:
+  sbt:
+    build: ./sbt
+    image: sbt
+    ports:
+    - "9000:9000"
+    volumes:
+    - ../:/root
+    links:
+    - dynamodb
+    depends_on:
+    - "dynamodb"
+    stdin_open: true
+    environment:
+    # Mocked Aws SDK Credentials for Local DynamoDB
+    # http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html#Credentials_from_Environment_Variables
+    - AWS_ACCESS_KEY_ID=123
+    - AWS_SECRET_ACCESS_KEY=abc
+    # Specify dynamoDB as local
+    - LOCAL_DYNAMO_DB=true
+    # Specify endpoint so it points to the dynamoDB docker container:port
+    - LOCAL_DYNAMO_DB_ENDPOINT=http://dynamodb:8000
+  dynamodb:
+    build: ./dynamodb
+    image: dynamodb
+    ports:
+    - 8000:8000
+    environment:
+        - TABLE=${DYNAMODB_TABLE}
