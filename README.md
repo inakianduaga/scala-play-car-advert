@@ -7,7 +7,7 @@ scala-play-car-advert
 
 ## Interacting with production app
 
-Use the [Swagger UI official-hosted client](http://petstore.swagger.io/?url=http://host_goes_here_once_deployed/swagger/car/adverts/spec.yml) to test the Rest application in production. 
+Use the [Swagger UI official-hosted client](http://petstore.swagger.io/?url=http://scala-play-car-advert.herokuapp.com/swagger/car/adverts/spec.yml) to test the Rest application in production. 
 
 ## Local Setup
 

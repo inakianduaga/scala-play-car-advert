@@ -7,7 +7,7 @@ swagger: "2.0"
 
 info:
   version: "1"
-  title: "Autoscout24 Cart Advert API"
+  title: "AutoScout24 Cart Advert API"
   description: "Simple CRUD REST api for managing car adverts"
   contact:
     name: inaki@inakianduaga.com
@@ -16,7 +16,7 @@ info:
 #                  Host, Base Path, Schemes and Content Types                  #
 ################################################################################
 #
-host: "SOME_URL_WHERE_APP_IS_DEPLOYED"
+host: "scala-play-car-advert.herokuapp.com"
 basePath: "/car/adverts"
 schemes:
 - "https"
@@ -48,6 +48,7 @@ paths:
              - first_registration
           required: false
           description: "How to sort results"
+          default: id
       responses:
         200:
           description: "The list of adverts, sorted by the given criteria (default is by id)"
