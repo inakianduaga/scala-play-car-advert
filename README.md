@@ -23,6 +23,7 @@ The entire application **is dockerized** and can be run locally easily w/ minima
 **Installation:**
 
 From the `./docker` folder
+
 1. Build docker containers for dynamoDB and SBT by running `docker-compose build`
 
 2. Spin up Play app & DynamoDB: `docker-compose up -d` (first run will take a while because SBT needs to populate the cache). App will be reachable on [http://localhost:9000](http://localhost:9000)
