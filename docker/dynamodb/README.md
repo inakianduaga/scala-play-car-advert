@@ -14,3 +14,18 @@ where the `TABLE` environment variable is used to provision the dynamoDB table u
 ## Shell access
 
 The dynamoDB exposes a shell on http://localhost:PORT/shell/, where port is where the dynamoDB container is listening
+
+For example, to view all items in a table, use
+
+```js
+var params = {
+    TableName: "ScalaPlayCarAdverts"
+};
+
+docClient.scan(params, function(err, data) {
+    if (err)
+        console.log(JSON.stringify(err, null, 2));
+    else
+        console.log(JSON.stringify(data, null, 2));
+});
+```

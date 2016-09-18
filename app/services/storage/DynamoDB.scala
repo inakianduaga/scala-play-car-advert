@@ -29,7 +29,7 @@ class DynamoDB @Inject() (configuration: play.api.Configuration) extends Storage
   }
 
   def update(data: StorableTrait): Try[Unit] = Try {
-    table.put(data.id, data.attributes)
+    table.put(data.id, data.attributes : _*)
   }
 
   /**
@@ -38,7 +38,8 @@ class DynamoDB @Inject() (configuration: play.api.Configuration) extends Storage
   def create(data: StorableTrait): Try[StorableTrait] = {
     if(show(data.id).isFailure) {
       Try {
-        table.put(data.id, data.attributes)
+        // http://stackoverflow.com/questions/10842851/scala-expand-list-of-tuples-into-variable-length-argument-list-of-tuples
+        table.put(data.id, data.attributes : _*)
         data
       }
     } else {
