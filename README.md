@@ -57,5 +57,6 @@ Service should:
 [travis-url]: https://travis-ci.org/inakianduaga/scala-play-car-advert
 [travis-image]: https://travis-ci.org/inakianduaga/scala-play-car-advert.svg?branch=master
 
-[coveralls-url]: https://coveralls.io/r/inakianduaga/scala-play-car-advert
-[coveralls-image]: https://coveralls.io/repos/inakianduaga/scala-play-car-advert/badge.png
+[coveralls-url]: https://coveralls.io/github/inakianduaga/scala-play-car-advert?branch=master
+[coveralls-image]: https://coveralls.io/repos/github/inakianduaga/scala-play-car-advert/badge.svg?branch=master
+
