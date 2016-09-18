@@ -7,14 +7,13 @@ import com.amazonaws.services.{ dynamodbv2 => aws }
 import org.slf4j._
 import services.storage.{DynamoDB => Service}
 import org.scalatest.{ BeforeAndAfter, Ignore }
+import services.storage.{SimpleStorable => Storable}
 
 /**
   * NOTE: A DynamoDB database must be runinng locally on port 8000 for these tests to work (see ./docker/dynamoDB/README.md)
   */
 /*
 class DynamoDBSpec extends PlaySpec with BeforeAndAfter {
-
-  case class Storable(id: String, attributes: Seq[(String, Any)]) extends StorableTrait {}
 
   // Set local endpoint
   implicit val dynamoDB = DynamoDB.local()

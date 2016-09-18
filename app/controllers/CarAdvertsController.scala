@@ -1,11 +1,15 @@
 package controllers
 
 import javax.inject._
+
+import models._
 import play.api._
 import play.api.libs.json.JsValue
 import play.api.mvc._
 import services.storage.StorageDriverTrait
+
 import scala.util.Try
+import services.json.{Converter => JsonConverter}
 
 /**
  * Cart adverts CRUD controller
@@ -20,8 +24,28 @@ class CarAdvertsController @Inject() (storage: StorageDriverTrait) extends Contr
   }
 
   def show(id: Int) = Action(parse.json) { request =>
-    request.body
+
+
+
+    JsonConverter
+      .toAdvert(request.body)                                 // Convert json to model
+      .map(_ match {                                          // Perform database operation, get back StorageTrait
+        case Left(x) => storage.show(x.id)
+        case Right(x) => storage.show(x.id)
+      })
+      .flatMap(x => x.get.toSt)
+
+
+
+
+
+
+    )
+
+
     Ok("")
+
+
   }
 
   def create(id: Int) = Action {
@@ -35,16 +59,5 @@ class CarAdvertsController @Inject() (storage: StorageDriverTrait) extends Contr
   def delete(id: Int) = Action {
     Ok("")
   }
-
-  private def hydrateFromJson(json: JsValue) = {
-//    Try {
-//      val isNew = (json \ "new").get
-//
-////      if(isNew)
-//    }
-
-  }
-
-
 
 }

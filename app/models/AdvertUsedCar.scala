@@ -48,7 +48,7 @@ case class AdvertUsedCar(
 object AdvertUsedCar extends ValidationTrait {
 
   /**
-    * Generate model from Json
+    * Hydrate model from Json
     * We read the Json manually, alternatively we could use
     * https://www.playframework.com/documentation/2.5.x/ScalaJson#JsValue-to-a-model
     */
@@ -70,6 +70,27 @@ object AdvertUsedCar extends ValidationTrait {
 
   }.flatMap(x => x)
 
+  /**
+    * Hydrate model from StorableTrait
+    */
+  def apply(storable: StorableTrait): Try[AdvertUsedCar] = Try {
+
+    def attributeByKey(key: String) = {
+      storable.attributes.find(x => x._1 == key).get._2
+    }
+
+    AdvertUsedCar(JsObject(
+      Seq(
+        "id" -> JsString(storable.id),
+        "title" -> JsString(attributeByKey("title").toString),
+        "fuel" -> JsString(attributeByKey("fuel").toString),
+        "price" -> JsNumber(attributeByKey("price").asInstanceOf[Int]),
+        "new" -> JsBoolean(false),
+        "mileage" -> JsNumber(attributeByKey("mileage").asInstanceOf[Int]),
+        "first_registration" -> JsString(attributeByKey("first_registration").toString)
+      )
+    ))
+  }.flatMap(x => x)
 
   private def validate(fuel: String, price: Int, date: String, title: String, mileage: Int): Try[Unit] = {
 
