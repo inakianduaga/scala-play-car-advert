@@ -13,7 +13,7 @@ import services.storage.{DynamoDB, StorageDriverTrait}
  */
 class Module extends AbstractModule {
 
-  override def configure() = {
+  override def configure(): Unit = {
     bind(classOf[StorageDriverTrait]).to(classOf[DynamoDB])
   }
 
