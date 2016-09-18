@@ -20,7 +20,7 @@ services:
     # Specify dynamoDB as local
     - LOCAL_DYNAMO_DB=true
     # Specify endpoint so it points to the dynamoDB docker container:port
-    - LOCAL_DYNAMO_DB_ENDPOINT=dynamodb:8000
+    - LOCAL_DYNAMO_DB_ENDPOINT=http://dynamodb:8000
   dynamodb:
     build: ./dynamodb
     image: dynamodb
