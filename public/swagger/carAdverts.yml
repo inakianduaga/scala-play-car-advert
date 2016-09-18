@@ -10,7 +10,9 @@ info:
   title: "AutoScout24 Cart Advert API"
   description: "Simple CRUD REST api for managing car adverts"
   contact:
-    name: inaki@inakianduaga.com
+    name: "Inaki Anduaga"
+    email: "inaki@inakianduaga.com"
+    url: "github.com/inakianduaga/scala-play-car-advert"
 
 ################################################################################
 #                  Host, Base Path, Schemes and Content Types                  #
