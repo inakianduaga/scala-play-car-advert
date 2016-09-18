@@ -15,7 +15,7 @@ trait StorageDriverTrait {
   /**
     * Note: Create throws an exception if the advert already exists
     */
-  def create(advert: StorableTrait): Try[Unit]
+  def create(advert: StorableTrait): Try[StorableTrait]
 
   def update(update: StorableTrait): Try[Unit]
 

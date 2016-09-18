@@ -3,7 +3,7 @@
 # ~~~~
 
 # REST endpoints
-GET     /car/adverts                controllers.CarAdvertsController.index
+GET     /car/adverts                controllers.CarAdvertsController.index(sortBy: Option[String])
 GET     /car/adverts/:id            controllers.CarAdvertsController.show(id: Int)
 POST    /car/adverts/:id            controllers.CarAdvertsController.create(id: Int)
 PUT     /car/adverts/:id            controllers.CarAdvertsController.update(id: Int)

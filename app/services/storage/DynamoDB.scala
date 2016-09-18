@@ -37,9 +37,15 @@ class DynamoDB @Inject() (configuration: play.api.Configuration) extends Storage
   /**
     * If item doesn't exist, try to create it, otherwise fail
     */
-  def create(data: StorableTrait): Try[Unit] = {
-    val item = show(data.id)
-    if(item.isFailure) Try { table.put(data.id, data.attributes) } else Failure(new Throwable("Item already exists"))
+  def create(data: StorableTrait): Try[StorableTrait] = {
+    if(show(data.id).isFailure) {
+      Try {
+        table.put(data.id, data.attributes)
+        data
+      }
+    } else {
+      Failure(new Throwable("Item already exists"))
+    }
   }
 
   def delete(id: String): Try[Unit] = Try {
