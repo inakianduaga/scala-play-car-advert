@@ -100,10 +100,6 @@ paths:
 
     put:
       description: "Update a car advert"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
       parameters:
       - in: "body"
         name: "payload"
@@ -126,16 +122,6 @@ paths:
 
     delete:
       description: "Delete a car advert"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "carAdvert"
-        required: true
-        schema:
-          $ref: "#/definitions/CarAdvert"
       responses:
         200:
           description: "An empty response"
