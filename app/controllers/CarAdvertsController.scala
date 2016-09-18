@@ -38,17 +38,17 @@ class CarAdvertsController @Inject() (storage: StorageDriverTrait) extends Contr
       .getOrElse(BadRequest)
   }
 
-  def show(id: String): Action[JsValue] = Action(parse.json) { request =>
-    JsonConverter
-      .toAdvert(request.body, Some(id))                           // Convert json to advert
-      .map(_.fold(                                                // Perform database operation, get Storable
-        x => storage.show(x.id), x => storage.show(x.id)
-      ))
-      .flatMap(x => x)                                            // Flatten Nested Try
+  def show(id: String): Action[AnyContent] = Action {
+    val operation = storage
+      .show(id)
       .flatMap(StorableConverter.toAdvert)                        // Convert Storable to Advert
       .map(_.fold(_.toJson, _.toJson))                            // Convert Advert to Json
-      .map(Ok(_))                                                 // Generate response
-      .getOrElse(BadRequest("Some bad message here"))             // Serve response
+
+    operation
+      .map(Ok(_))                                                 // Serve response
+      .getOrElse(
+        BadRequest(JsString(operation.failed.get.getMessage))
+      )
   }
 
   def create: Action[JsValue] = Action(parse.json) { request =>
@@ -59,9 +59,9 @@ class CarAdvertsController @Inject() (storage: StorageDriverTrait) extends Contr
       .flatMap(StorableConverter.toAdvert)                        // Convert Storable to Advert
       .map(_.fold(_.toJson, _.toJson))                            // Convert Advert to Json
 
-    operation                                                     // Serve response
-      .map(x => Ok(x))                                            // Generate response
-      .getOrElse(
+    operation
+      .map(x => Ok(x))
+      .getOrElse(                                                 // Serve response
         BadRequest(JsString(operation.failed.get.getMessage))
       )
   }
@@ -73,9 +73,9 @@ class CarAdvertsController @Inject() (storage: StorageDriverTrait) extends Contr
   def delete(id: String): Action[AnyContent] = Action {
     val operation = storage.delete(id)                            // Attemp to delete advert
 
-    operation                                                     // Serve response
+    operation
       .map(x => Ok(JsString("")))                                 // empty ack response
-      .getOrElse(
+      .getOrElse(                                                 // Serve response
         BadRequest(JsString(operation.failed.get.getMessage))
       )
   }

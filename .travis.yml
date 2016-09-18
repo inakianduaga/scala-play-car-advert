@@ -12,9 +12,7 @@ script:
 - docker run --rm -v $PWD:/root sbt scalastyle
 # Compile and run tests
 - docker run --rm -v $PWD:/root --link dynamodb -e "LOCAL_DYNAMO_DB_ENDPOINT=http://dynamodb:8000" sbt assembly
-- docker run -d -v $PWD:/root sbt clean coverage test
-- docker run --rm -v $PWD:/root sbt clean coverage test
-- docker run --rm -v $PWD:/root sbt clean coverage test
+- docker run --rm -v $PWD:/root --link dynamodb -e "LOCAL_DYNAMO_DB_ENDPOINT=http://dynamodb:8000" sbt clean coverage test
 before_deploy:
   # http://stackoverflow.com/questions/25929225/how-to-deploy-to-github-with-file-pattern-on-travis
   - export RELEASE_PKG_FILE=$(ls ./target/scala-2.11/*.jar)
@@ -29,7 +27,7 @@ deploy:
     tags: true
 after_success:
   # Launch dynamoDB container so DB tests can run
-  - docker run -d -p 8000:8000 -e "TABLE=ScalaPlayCarAdverts" --name dynamodb dynamodb
+  #- docker run -d -p 8000:8000 -e "TABLE=ScalaPlayCarAdverts" --name dynamodb dynamodb
   # Dump current Travis Env into file
   - printenv > .env
   - docker run --rm --env-file=.env -v $PWD:/root --link dynamodb -e "LOCAL_DYNAMO_DB_ENDPOINT=http://dynamodb:8000" sbt coverageReport coveralls
