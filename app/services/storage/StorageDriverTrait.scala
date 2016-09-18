@@ -17,6 +17,6 @@ trait StorageDriverTrait {
     */
   def create(advert: StorableTrait): Try[StorableTrait]
 
-  def update(update: StorableTrait): Try[Unit]
+  def update(update: StorableTrait): Try[StorableTrait]
 
 }

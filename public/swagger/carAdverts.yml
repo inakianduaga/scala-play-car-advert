@@ -100,7 +100,7 @@ paths:
             $ref: '#/definitions/NotFoundException'
 
     put:
-      description: "Update a car advert"
+      description: "Update a car advert. Requires sending the entire payload (doesn't support partial updates)"
       parameters:
       - in: "body"
         name: "payload"

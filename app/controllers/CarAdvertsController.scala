@@ -2,8 +2,6 @@ package controllers
 
 import javax.inject._
 
-import models._
-import play.api._
 import play.api.libs.json.{JsValue, Json, JsString}
 import play.api.mvc.{Action, _}
 import services.storage.StorageDriverTrait
@@ -68,8 +66,19 @@ class CarAdvertsController @Inject() (storage: StorageDriverTrait) extends Contr
       )
   }
 
-  def update(id: String) = Action {
-    Ok("")
+  def update(id: String): Action[JsValue] = Action(parse.json) { request =>
+    val operation = JsonConverter
+      .toAdvert(request.body, Some(id))                           // Convert json to advert
+      .map(_.fold(storage.update(_), storage.update(_)))          // Perform database operation, get Storable
+      .flatMap(x => x)                                            // Flatten Nested Try
+      .flatMap(StorableConverter.toAdvert)                        // Convert Storable to Advert
+      .map(_.fold(_.toJson, _.toJson))                            // Convert Advert to Json
+
+    operation
+      .map(x => Ok(x))
+      .getOrElse(                                                 // Serve response
+        BadRequest(JsString(operation.failed.get.getMessage))
+      )
   }
 
   def delete(id: String): Action[AnyContent] = Action {

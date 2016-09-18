@@ -28,8 +28,15 @@ class DynamoDB @Inject() (configuration: play.api.Configuration) extends Storage
     if(item.isDefined) Success(Storable(item = item.get)) else Failure(new Throwable(s"advert w/ id $id not found"))
   }
 
-  def update(data: StorableTrait): Try[Unit] = Try {
-    table.put(data.id, data.attributes : _*)
+  def update(data: StorableTrait): Try[StorableTrait] = {
+    if(show(data.id).isSuccess) {
+      Try {
+        table.put(data.id, data.attributes: _*)
+        data
+      }
+    } else {
+      Failure(new Throwable("Item doesn't exist, update failed"))
+    }
   }
 
   /**

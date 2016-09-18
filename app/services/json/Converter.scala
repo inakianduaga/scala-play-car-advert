@@ -9,8 +9,8 @@ import scala.util.Try
   */
 object Converter {
 
-  def toAdvert(json: JsValue, id: Option[String] = None): Try[Either[AdvertNewCar, AdvertUsedCar]] = Try {
+  def toAdvert(json: JsValue, idOverride: Option[String] = None): Try[Either[AdvertNewCar, AdvertUsedCar]] = Try {
     val isNew = (json \ "new").get.as[Boolean]
-    if(isNew) Left(AdvertNewCar(json).get) else Right(AdvertUsedCar(json).get)
+    if(isNew) Left(AdvertNewCar(json = json, idOverride = idOverride).get) else Right(AdvertUsedCar(json = json, idOverride = idOverride).get)
   }
 }

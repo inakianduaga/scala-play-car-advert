@@ -47,9 +47,9 @@ object AdvertNewCar extends ValidationTrait {
     * We read the Json manually, alternatively we could use
     * https://www.playframework.com/documentation/2.5.x/ScalaJson#JsValue-to-a-model
     */
-  def apply(json: JsValue): Try[AdvertNewCar] = Try {
+  def apply(json: JsValue, idOverride: Option[String] = None): Try[AdvertNewCar] = Try {
 
-    val _id = (json \ "id").toOption.map(_.as[String])
+    val _id = if(idOverride.isDefined) idOverride else (json \ "id").toOption.map(_.as[String])
     val title = (json \ "title").as[String]
     val _fuel = (json \ "fuel").as[String]
     val price = (json \ "price").as[Int]
