@@ -16,9 +16,9 @@ info:
 #                  Host, Base Path, Schemes and Content Types                  #
 ################################################################################
 #
-host: "scala-play-car-advert.herokuapp.com"
-basePath: "/car/adverts"
+basePath: "/"
 schemes:
+- "http"
 - "https"
 produces:
   - application/json
@@ -40,11 +40,11 @@ paths:
           type: string
           enum:
              - id
-             - title,
-             - fuel,
-             - price,
-             - new,
-             - mileage,
+             - title
+             - fuel
+             - price
+             - new
+             - mileage
              - first_registration
           required: false
           description: "How to sort results"
