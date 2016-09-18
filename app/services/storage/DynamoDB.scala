@@ -76,7 +76,23 @@ class DynamoDB @Inject() (configuration: play.api.Configuration) extends Storage
   }
 
   object Storable {
-    def apply(item: Item): StorableTrait =  Storable(item.attributes.map(a => (a.name, a.value)))
+    def apply(item: Item): StorableTrait =  Storable(item.attributes.map(a => (a.name, itemAttributeToPlain(a.value))))
+
+    /**
+      * Convert a DynamoDB item attribute to a "plain" value.
+      * Note: This doesn't support nested structures
+      */
+    private def itemAttributeToPlain(value: AttributeValue): Any = {
+      if(value.bl.isDefined) {
+        value.bl.get
+      } else if(value.s.isDefined) {
+        value.s.get
+      } else if (value.n.isDefined) {
+        value.n.get
+      } else {                          // NULL case
+        ""
+      }
+    }
   }
 
 }

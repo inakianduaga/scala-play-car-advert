@@ -16,6 +16,8 @@ class DynamoDBSpec extends PlaySpec with BeforeAndAfter with OneAppPerSuite {
 
   val service = app.injector.instanceOf[Service]
 
+  val mockAdvertData = Seq("title" -> "BMW M3", "fuel" -> "Diesel", "price" -> 55, "mileage" -> 0, "first_registration" -> "2016-05-12")
+
   /**
     * Recreate database after each test
     * https://github.com/seratch/AWScala/blob/master/src/test/scala/awscala/DynamoDBV2Spec.scala#L18
@@ -47,10 +49,10 @@ class DynamoDBSpec extends PlaySpec with BeforeAndAfter with OneAppPerSuite {
     println(s"Created DynamoDB table has been activated.")
 */
     // Populate database w/ test data
-    service.create(Storable("1", Seq("field" -> "value")))
-    service.create(Storable("2", Seq("field" -> "value2")))
-    service.create(Storable("3", Seq("field" -> "value3")))
-    service.create(Storable("foobar", Seq("field" -> "value3")))
+    service.create(Storable("1", mockAdvertData))
+    service.create(Storable("2", mockAdvertData))
+    service.create(Storable("3", mockAdvertData))
+    service.create(Storable("foobar", mockAdvertData))
   }
 
   "Storage service" must {
@@ -68,12 +70,23 @@ class DynamoDBSpec extends PlaySpec with BeforeAndAfter with OneAppPerSuite {
       assert(service.show("foobar").isSuccess)
     }
 
+    "retrieve an item and hydrate an advert successfully " in {
+      // Create a valid ad entry
+      service.create(Storable("a_random_id", mockAdvertData))
+
+      // Fetch add entry
+      val entry = service.show("a_random_id")
+
+      // Check hydration is succesful
+      assert(Converter.toAdvert(entry.get).isSuccess)
+    }
+
     "throw when item is not found" in {
       assert(service.show("notAnExistingKey").isFailure)
     }
 
     "throw when attempting to create an item that already exists" in {
-      assert(service.create(Storable("1", Seq("field" -> "value"))).isFailure)
+      assert(service.create(Storable("1", mockAdvertData)).isFailure)
     }
 
     "delete an item" in {

@@ -65,6 +65,7 @@ object AdvertUsedCar extends ValidationTrait {
       val id = normalizeId(_id)
       val fuel = Fuel.fromString(_fuel).get
       val date = dateFromString(firstRegistration).get
+
       new AdvertUsedCar(id, title = title, fuel = fuel, price = price, _new = false, mileage = mileage, firstRegistration = date)
     })
 
@@ -84,9 +85,9 @@ object AdvertUsedCar extends ValidationTrait {
         "id" -> JsString(storable.id),
         "title" -> JsString(attributeByKey("title").toString),
         "fuel" -> JsString(attributeByKey("fuel").toString),
-        "price" -> JsNumber(attributeByKey("price").asInstanceOf[Int]),
+        "price" -> JsNumber(attributeByKey("price").toString.toInt),
         "new" -> JsBoolean(false),
-        "mileage" -> JsNumber(attributeByKey("mileage").asInstanceOf[Int]),
+        "mileage" -> JsNumber(attributeByKey("mileage").toString.toInt),
         "first_registration" -> JsString(attributeByKey("first_registration").toString)
       )
     ))

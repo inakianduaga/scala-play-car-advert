@@ -10,7 +10,7 @@ import scala.util.Try
 object Converter {
 
   def toAdvert(json: JsValue, id: Option[String] = None): Try[Either[AdvertNewCar, AdvertUsedCar]] = Try {
-    val isNew = (json \ "new").toOption.isDefined
+    val isNew = (json \ "new").get.as[Boolean]
     if(isNew) Left(AdvertNewCar(json).get) else Right(AdvertUsedCar(json).get)
   }
 }

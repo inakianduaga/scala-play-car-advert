@@ -76,7 +76,7 @@ object AdvertNewCar extends ValidationTrait {
         "id" -> JsString(storable.id),
         "title" -> JsString(attributeByKey("title").toString),
         "fuel" -> JsString(attributeByKey("fuel").toString),
-        "price" -> JsNumber(attributeByKey("price").asInstanceOf[Int]),
+        "price" -> JsNumber(attributeByKey("price").toString.toInt),
         "new" -> JsBoolean(true),
         "mileage" -> JsNull,
         "first_registration" -> JsNull
