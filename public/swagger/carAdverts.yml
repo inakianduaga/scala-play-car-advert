@@ -59,6 +59,24 @@ paths:
             items:
               $ref: '#/definitions/CarAdvertResponse'
 
+    post:
+      description: "Create a car advert"
+      parameters:
+      - in: "body"
+        name: "payload"
+        required: true
+        schema:
+          $ref: "#/definitions/CarAdvert"
+      responses:
+        200:
+          description: "The car advert"
+          schema:
+            $ref: '#/definitions/CarAdvertResponse'
+        422:
+          description: "Invalid data"
+          schema:
+            $ref: '#/definitions/ValidationFailedException'
+
   /car/adverts/{id}:
     parameters:
       - name: "id"
@@ -80,25 +98,6 @@ paths:
           description: "Car advert not found"
           schema:
             $ref: '#/definitions/NotFoundException'
-
-
-    post:
-      description: "Create a car advert"
-      parameters:
-      - in: "body"
-        name: "payload"
-        required: true
-        schema:
-          $ref: "#/definitions/CarAdvert"
-      responses:
-        200:
-          description: "The car advert"
-          schema:
-            $ref: '#/definitions/CarAdvertResponse'
-        422:
-          description: "Invalid data"
-          schema:
-            $ref: '#/definitions/ValidationFailedException'
 
     put:
       description: "Update a car advert"

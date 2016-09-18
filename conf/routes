@@ -4,8 +4,8 @@
 
 # REST endpoints
 GET     /car/adverts                controllers.CarAdvertsController.index(sortBy: Option[String])
+POST    /car/adverts                controllers.CarAdvertsController.create()
 GET     /car/adverts/:id            controllers.CarAdvertsController.show(id: Int)
-POST    /car/adverts/:id            controllers.CarAdvertsController.create(id: Int)
 PUT     /car/adverts/:id            controllers.CarAdvertsController.update(id: Int)
 DELETE  /car/adverts/:id            controllers.CarAdvertsController.delete(id: Int)
 

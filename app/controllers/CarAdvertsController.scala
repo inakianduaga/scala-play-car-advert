@@ -51,7 +51,7 @@ class CarAdvertsController @Inject() (storage: StorageDriverTrait) extends Contr
       .getOrElse(BadRequest("Some bad message here"))         // Serve response
   }
 
-  def create(id: Int): Action[JsValue] = Action(parse.json) { request =>
+  def create: Action[JsValue] = Action(parse.json) { request =>
     JsonConverter
       .toAdvert(request.body)                                 // Convert json to advert
       .map(_.fold(storage.create(_), storage.create(_)))      // Perform database operation, get Storable
