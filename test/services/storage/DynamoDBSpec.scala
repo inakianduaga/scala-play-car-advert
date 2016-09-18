@@ -16,8 +16,8 @@ class DynamoDBSpec extends PlaySpec with BeforeAndAfter with OneAppPerSuite {
 
   val service = app.injector.instanceOf[Service]
 
-  val mockAdvertData = Seq("title" -> "BMW M3", "fuel" -> "Diesel", "price" -> 55, "mileage" -> 0, "first_registration" -> "2016-05-12")
-
+  val mockAdvertData = Seq("title" -> "BMW M3", "fuel" -> "Diesel", "price" -> 55, "mileage" -> 2000, "new" -> false, "first_registration" -> "2016-05-12")
+  val mockAdvertData2 = Seq("title" -> "BMW M3", "fuel" -> "Diesel", "price" -> 55,  "new" -> true)
   /**
     * Recreate database after each test
     * https://github.com/seratch/AWScala/blob/master/src/test/scala/awscala/DynamoDBV2Spec.scala#L18
@@ -51,8 +51,8 @@ class DynamoDBSpec extends PlaySpec with BeforeAndAfter with OneAppPerSuite {
     // Populate database w/ test data
     service.create(Storable("1", mockAdvertData))
     service.create(Storable("2", mockAdvertData))
-    service.create(Storable("3", mockAdvertData))
-    service.create(Storable("foobar", mockAdvertData))
+    service.create(Storable("3", mockAdvertData2))
+    service.create(Storable("foobar", mockAdvertData2))
   }
 
   "Storage service" must {
@@ -72,7 +72,7 @@ class DynamoDBSpec extends PlaySpec with BeforeAndAfter with OneAppPerSuite {
 
     "retrieve an item and hydrate an advert successfully " in {
       // Create a valid ad entry
-      service.create(Storable("a_random_id", mockAdvertData))
+      service.create(Storable("a_random_id", mockAdvertData2))
 
       // Fetch add entry
       val entry = service.show("a_random_id")

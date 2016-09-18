@@ -27,7 +27,7 @@ case class AdvertUsedCar(
         "price" -> this.price,
         "new" -> this._new,
         "mileage" -> this.mileage,
-        "firstRegistration" -> new SimpleDateFormat("yyyy-MM-dd").format(this.firstRegistration)
+        "first_registration" -> new SimpleDateFormat("yyyy-MM-dd").format(this.firstRegistration)
       )
     }
 
