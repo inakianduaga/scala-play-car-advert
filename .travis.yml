@@ -3,9 +3,17 @@ dist: trusty
 services:
 - docker
 script:
+# Build containers
 - docker build -t sbt ./docker/sbt
+- docker build -t dynamodb ./docker/dynamodb
+# Launch dynamoDB container so DB tests can run
+- docker run -d -p 8000:8000 -e "TABLE=ScalaPlayCarAdverts" dynamodb
+# Run stylechecker
 - docker run --rm -v $PWD:/root sbt scalastyle
-- docker run --rm -v $PWD:/root sbt assembly
+# Compile and run tests
+- docker run --rm -v $PWD:/root --link dynamodb -e "LOCAL_DYNAMO_DB_ENDPOINT=http://dynamodb:8000" sbt assembly
+- docker run -d -v $PWD:/root sbt clean coverage test
+- docker run --rm -v $PWD:/root sbt clean coverage test
 - docker run --rm -v $PWD:/root sbt clean coverage test
 before_deploy:
   # http://stackoverflow.com/questions/25929225/how-to-deploy-to-github-with-file-pattern-on-travis
