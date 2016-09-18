@@ -3,9 +3,9 @@ scala-play-car-advert
 
 [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url]
 
-> Scala Play car advert example application
+> Scala Play Restful example app w/ AWS DynamoDB integration
 
-This is a small excercise app to demonstrate integration of a Restful service w/ AWS DynamoDB using the Play framework  
+This is a small exercise app to demonstrate integration of a Restful service w/ AWS DynamoDB using the Scala Play framework  
 
 ## Interacting with production app
 
@@ -13,14 +13,17 @@ Use the [Swagger UI official-hosted client](http://petstore.swagger.io/?url=http
 
 ## Local Setup
 
-The entire application is dockerized and can be run locally easily w/ minimal dependencies.
+The entire application **is dockerized** and can be run locally easily w/ minimal dependencies.
 
-*Requirements*: [Docker](https://docs.docker.com/engine/installation/), [Docker Compose](https://docs.docker.com/compose/install/) must be installed
+**Requirements:**
+ [Docker](https://docs.docker.com/engine/installation/), [Docker Compose](https://docs.docker.com/compose/install/) must be installed
+ 
+**Installation:**
 
 From the `./docker` folder
 1. Build docker containers for dynamoDB and SBT by running `docker-compose build`
-2. Spin up Play app & DynamoDB: `docker-compose up -d`. First run will take a while because SBT needs to populate the cache. App will be reachable on localhost:9000
-3. API can be tested through the [Swagger UI](http://petstore.swagger.io/?url=http://localhost:9000/swagger/car/adverts/spec.yml). Local DynamoDB [provides a shell UI](http://localhost:8000/shell/) as well       
+2. Spin up Play app & DynamoDB: `docker-compose up -d` (first run will take a while because SBT needs to populate the cache). App will be reachable on [http://localhost:9000](http://localhost:9000)
+3. API can be tested through the [Swagger UI](http://petstore.swagger.io/?url=http://localhost:9000/swagger/car/adverts/spec.yml) endpoint. Local DynamoDB [provides a shell UI](http://localhost:8000/shell/) as well to query DB directly       
 
 ## Tests:
 
