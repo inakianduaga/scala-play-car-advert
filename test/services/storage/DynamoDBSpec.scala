@@ -17,7 +17,7 @@ class DynamoDBSpec extends PlaySpec with BeforeAndAfter with OneAppPerSuite {
   val service = app.injector.instanceOf[Service]
 
   val mockAdvertData = Seq("title" -> "BMW M3", "fuel" -> "Diesel", "price" -> 55, "mileage" -> 2000, "new" -> false, "first_registration" -> "2016-05-12")
-  val mockAdvertData2 = Seq("title" -> "BMW M3", "fuel" -> "Diesel", "price" -> 55,  "new" -> true)
+  val mockAdvertData2 = Seq("title" -> "Ferrari", "fuel" -> "Gasoline", "price" -> 2500,  "new" -> true)
   /**
     * Recreate database after each test
     * https://github.com/seratch/AWScala/blob/master/src/test/scala/awscala/DynamoDBV2Spec.scala#L18
