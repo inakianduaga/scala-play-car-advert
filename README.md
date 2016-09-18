@@ -9,7 +9,8 @@ This is a small exercise app to demonstrate integration of a Restful service w/ 
 
 ## Interacting with production app
 
-Use the [Swagger UI official-hosted client](http://petstore.swagger.io/?url=http://scala-play-car-advert.herokuapp.com/swagger/car/adverts/spec.yml) to test the Rest application in production. 
+Use the [Swagger UI official-hosted client](http://petstore.swagger.io/?url=http://scala-play-car-advert.herokuapp.com/swagger/car/adverts/spec.yml) to test the Rest application in production.
+[This is the Swagger specification](./public/swagger/carAdverts.yml) of the REST API used by the client
 
 ## Local Setup
 

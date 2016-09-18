@@ -25,13 +25,6 @@ deploy:
     on:
       repo: inakianduaga/scala-play-car-advert
       tags: true
-#  - provider: heroku
-#    api_key:
-#      secure: fl+hCiGyagXy0rHY358veJWFpjCJPsn1dgcKSOC/hfBX6PO7Yolz/N9Z39705KkUHqdOPfQ7Qa+1a4IJGQB+uefsGk4CWI2Qf+EYgQPbSP+KtwcCgj8jhB1r8B8gGWcfv4XGWIa8yG9uET1J+UV//cubb57MA0XAZQq+LlVPCfwxRebQ1EgXr/iD0f/g/S1H6A90+vLfjD4VstMc0XZV5lYGwWx1rlhaiBZm2nlIRXoBMEnJbDkU5OSu1+YMnvVRdHeMbZLNl4oIJgmKo+B8xXnkoitHz1KBUIpD2UaruDzygbbLBMYUBeLKYWWfrGq4zokR6sHONBe6gcP2P3iYfeAVI4VIJjsJFiU3P0ZCJaalDR26u605/8YmqMeEdG6rNKALLyUpKVe4N2FFxQ89XiwngiRzJnU5/12FEjvH1UXimXsU43gfXKf8laoVlLhn5uYgppEYaVvUk2bww2kMXME5jWbiZmSzdNcumZgv5u0ZDMR913Ybl5A/DK8Bs5lAx8aDzdLrt7C10xxc+DmanUxmb+YHRj2ZbL22IEqg17DrTJmgMheOSaIzHXonCOxicTuHuAfPehoRMKGOH+DWUHtknotdNI9Pr41figj89eelJxp44xSZpfhE+p4BrUKyY5EosnTW/Sqqzx/tx0rQA5jiSA3zIhgJrrDaB3zchDA=
-#    app: scala-play-car-advert
-#    on:
-#      repo: inakianduaga/scala-play-car-advert
-#      tags: true
 after_success:
   # Dump current Travis Env into file
   - printenv > .env
